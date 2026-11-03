@@ -6,14 +6,13 @@ An hourly space rental application built with **Flutter** (Frontend) and **Node.
 
 ---
 
-## 📂 Project Structure
+## 📁 Project Structure
 
 ```text
 rentspace/
 ├── rentspace/                                     # Flutter Frontend (50% UI Standalone)
 │   ├── lib/                                       # UI Screens, Controllers & Models
-│   ├── test/                                      # Widget and unit tests
-│   └── pubspec.yaml                               # Flutter dependencies
+│   └── pubspec.yaml                               # Flutter dependencies (name: rentspace)
 │
 ├── server/                                        # Express.js REST API + MySQL Database
 │   ├── app.js                                     # Express server entry point
@@ -48,7 +47,7 @@ npm start
 ```
 *API server will listen on `http://localhost:3000`.*
 
-### 2. Run API Tests
+### 2. Run API Tests (Sprint 2 Requirement)
 
 - **Run native test suite (Node test runner)**:
   ```powershell
@@ -59,17 +58,13 @@ npm start
   npm run test:api
   ```
 - **Run in VS Code LiteClient**:
-  Open the **LiteClient** tab in the VS Code sidebar and send any of the 15 pre-configured requests under the `RentSpace API (Sprint 2)` collection.
+  Open the **LiteClient** tab in the VS Code sidebar and send any of the pre-configured requests under the `RentSpace API (Sprint 2)` collection.
 
-### 3. Run Frontend (Standalone UI)
+### 3. Run Frontend (50% UI Standalone - No Backend Connection)
 
 ```powershell
 cd ../rentspace
 flutter pub get
-flutter run -d chrome
+flutter run
 ```
-
-Run frontend tests:
-```powershell
-flutter test
-```
+*(Unit tests and Widget tests are scheduled for Sprint 3 & Sprint 4).*
