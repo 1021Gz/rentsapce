@@ -379,6 +379,46 @@ app.post('/api/admin/logs', async (req, res) => {
   }
 });
 
+app.get('/api/admin/stats', async (_req, res) => {
+  try {
+    const [[usersRow]] = await db.query('SELECT COUNT(*) AS total_users FROM users');
+    const [[spacesRow]] = await db.query(
+      'SELECT COUNT(*) AS total_spaces, SUM(CASE WHEN status = "pending" THEN 1 ELSE 0 END) AS pending_spaces FROM spaces'
+    );
+    const [[bookingsRow]] = await db.query(
+      'SELECT COUNT(*) AS total_bookings, COALESCE(SUM(total_price), 0) AS total_revenue FROM bookings'
+    );
+    res.json({
+      ok: true,
+      stats: {
+        total_users: Number(usersRow.total_users),
+        total_spaces: Number(spacesRow.total_spaces),
+        pending_spaces: Number(spacesRow.pending_spaces || 0),
+        total_bookings: Number(bookingsRow.total_bookings),
+        total_revenue: Number(bookingsRow.total_revenue),
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+app.patch('/api/admin/users/:id/status', async (req, res) => {
+  try {
+    const { status } = req.body || {};
+    if (!['active', 'suspended'].includes(status)) {
+      return res.status(400).json({ ok: false, message: 'status must be active or suspended' });
+    }
+    const [updateResult] = await db.query('UPDATE users SET status = ? WHERE user_id = ?', [status, req.params.id]);
+    if (updateResult.affectedRows === 0) {
+      return res.status(404).json({ ok: false, message: 'User not found' });
+    }
+    res.json({ ok: true, user_id: Number(req.params.id), status });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
 //=================== Starting server =======================
 const port = Number(process.env.PORT || 3000);
 if (require.main === module) {

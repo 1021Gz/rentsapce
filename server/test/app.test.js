@@ -270,4 +270,23 @@ test('8. Space detail, admin approval, admin logs, and image upload', async () =
   const uploadsListData = await uploadsListRes.json();
   assert.equal(uploadsListData.ok, true);
   assert(Array.isArray(uploadsListData.files));
+
+  // Admin platform stats
+  const statsRes = await fetch(`${base}/admin/stats`);
+  assert.equal(statsRes.status, 200);
+  const statsData = await statsRes.json();
+  assert.equal(statsData.ok, true);
+  assert(typeof statsData.stats.total_users === 'number');
+  assert(typeof statsData.stats.total_spaces === 'number');
+
+  // Toggle user status
+  const userStatusRes = await fetch(`${base}/admin/users/1002/status`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status: 'active' }),
+  });
+  assert.equal(userStatusRes.status, 200);
+  const userStatusData = await userStatusRes.json();
+  assert.equal(userStatusData.ok, true);
+  assert.equal(userStatusData.status, 'active');
 });

@@ -303,6 +303,32 @@
           "rawType": "json",
           "value": "{\n  \"filename\": \"slip_sample.png\",\n  \"base64Data\": \"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==\"\n}"
         }
+      },
+      {
+        "id": "req_22_admin_stats",
+        "name": "22. Admin Stats",
+        "type": "request",
+        "method": "GET",
+        "url": "http://localhost:3000/api/admin/stats",
+        "headers": {},
+        "body": {
+          "mode": "none"
+        }
+      },
+      {
+        "id": "req_23_admin_user_status",
+        "name": "23. User Status",
+        "type": "request",
+        "method": "PATCH",
+        "url": "http://localhost:3000/api/admin/users/1002/status",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "mode": "raw",
+          "rawType": "json",
+          "value": "{\n  \"status\": \"active\"\n}"
+        }
       }
     ]
   }
