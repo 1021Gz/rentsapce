@@ -89,7 +89,15 @@ app.post(['/api/register', '/api/auth/register'], async (req, res) => {
     }
     const userRole = role === 'renter' ? 'customer' : role;
     const [insertResult] = await db.query(
-      'INSERT INTO users (name, username, email, password_hash, role, status) VALUES (?, ?, ?, ?, ?, "active")',
+      `INSERT INTO users (name, username, email, password_hash, role, status)
+       VALUES (?, ?, ?, ?, ?, 'active')
+       ON DUPLICATE KEY UPDATE
+         user_id = LAST_INSERT_ID(user_id),
+         name = VALUES(name),
+         email = VALUES(email),
+         password_hash = VALUES(password_hash),
+         role = VALUES(role),
+         status = 'active'`,
       [full_name || username, username.trim(), email.trim(), hashPassword(password), userRole]
     );
     res.status(201).json({
