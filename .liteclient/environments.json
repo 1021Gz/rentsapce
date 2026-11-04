@@ -1,0 +1,30 @@
+[
+  {
+    "id": "globals",
+    "name": "Globals",
+    "variables": [
+      {
+        "id": "var_base_url_global",
+        "name": "baseUrl",
+        "initialValue": "http://localhost:3000",
+        "currentValue": "http://localhost:3000",
+        "type": "default",
+        "enabled": true
+      }
+    ]
+  },
+  {
+    "id": "env_rentspace_local",
+    "name": "RentSpace Local (port 3000)",
+    "variables": [
+      {
+        "id": "var_base_url_local",
+        "name": "baseUrl",
+        "initialValue": "http://localhost:3000",
+        "currentValue": "http://localhost:3000",
+        "type": "default",
+        "enabled": true
+      }
+    ]
+  }
+]
