@@ -209,6 +209,24 @@ app.patch('/api/spaces/:id', async (req, res) => {
   }
 });
 
+app.patch('/api/spaces/:id/active', async (req, res) => {
+  const { is_active } = req.body || {};
+  if (typeof is_active !== 'boolean') {
+    return res.status(400).json({ ok: false, message: 'is_active must be a boolean' });
+  }
+  try {
+    const [result] = await db.query('UPDATE spaces SET is_active = ? WHERE space_id = ?', [
+      Number(is_active), req.params.id,
+    ]);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ ok: false, message: 'Space not found' });
+    }
+    res.json({ ok: true, is_active: Number(is_active) });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
 app.patch('/api/admin/spaces/:id/approval', async (req, res) => {
   try {
     const { status = 'approved' } = req.body;
@@ -293,6 +311,39 @@ app.post('/api/bookings/:id/review', async (req, res) => {
 });
 
 //------------------- 5. Uploads & Admin -------------------
+app.post('/api/upload', async (req, res) => {
+  const { filename, base64Data } = req.body || {};
+  if (typeof filename !== 'string' || typeof base64Data !== 'string' || !base64Data) {
+    return res.status(400).json({ ok: false, message: 'filename and base64Data are required' });
+  }
+  const extension = path.extname(filename).toLowerCase();
+  if (!['.png', '.jpg', '.jpeg', '.webp'].includes(extension)) {
+    return res.status(400).json({ ok: false, message: 'Supported images: png, jpg, jpeg, webp' });
+  }
+  if (!/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(base64Data)) {
+    return res.status(400).json({ ok: false, message: 'Invalid base64Data' });
+  }
+  const bytes = Buffer.from(base64Data, 'base64');
+  const isPng = bytes.subarray(0, 8).equals(Buffer.from('89504e470d0a1a0a', 'hex'));
+  const isJpeg = bytes.subarray(0, 3).equals(Buffer.from('ffd8ff', 'hex'));
+  const isWebp = bytes.toString('ascii', 0, 4) === 'RIFF' && bytes.toString('ascii', 8, 12) === 'WEBP';
+  if (!(extension === '.png' ? isPng : extension === '.webp' ? isWebp : isJpeg)) {
+    return res.status(400).json({ ok: false, message: 'Image content does not match filename extension' });
+  }
+  // Generate the stored name so uploads cannot overwrite files or escape uploadsDir.
+  const storedName = `${crypto.randomUUID()}${extension}`;
+  try {
+    await fs.promises.writeFile(path.join(uploadsDir, storedName), bytes, { flag: 'wx' });
+    res.status(201).json({
+      ok: true,
+      filename: storedName,
+      url: `${req.protocol}://${req.get('host')}/uploads/${storedName}`,
+    });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
 app.get('/api/uploads', (_req, res) => {
   try {
     const fileNames = fs.readdirSync(uploadsDir).filter((singleFile) => /\.(jpg|jpeg|png|webp)$/i.test(singleFile));
