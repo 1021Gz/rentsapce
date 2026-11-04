@@ -5,8 +5,6 @@
   "description": "Express + MySQL API for the Flutter RentSpace app",
   "scripts": {
     "start": "node app.js",
-    "start:simple": "node app_simple.js",
-    "start:express": "node app.js",
     "dev": "node --watch app.js",
     "db:init": "node init_db.js",
     "test": "node --test test/app.test.js",
