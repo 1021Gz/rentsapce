@@ -11,11 +11,11 @@ An hourly space rental application built with **Flutter** (Frontend) and **Node.
 ```text
 rentspace/
 ├── rentspace/                                     # Flutter Frontend (50% UI Standalone)
-│   ├── lib/                                       # UI Screens, Controllers & Models
+│   ├── lib/                                       # UI Screens (50% Standalone) & Mock Data
 │   └── pubspec.yaml                               # Flutter dependencies (name: rentspace)
 │
 ├── server/                                        # Express.js REST API + MySQL Database
-│   ├── app.js                                     # Express server entry point
+│   ├── app.js                                     # Express server (argon2id & JWT)
 │   ├── db_config.js                               # MySQL2 connection setup
 │   ├── init_db.js                                 # Database auto-initialization script
 │   ├── schema.sql                                 # Complete DDL schema & sample seeds
@@ -49,16 +49,16 @@ npm start
 
 ### 2. Run API Tests (Sprint 2 Requirement)
 
-- **Run native test suite (Node test runner)**:
-  ```powershell
-  npm test
-  ```
+- **Run in VS Code LiteClient**:
+  Open the **LiteClient** tab in the VS Code sidebar and send any of the pre-configured requests under the `RentSpace API (Sprint 2)` collection.
 - **Run automated E2E API test**:
   ```powershell
   npm run test:api
   ```
-- **Run in VS Code LiteClient**:
-  Open the **LiteClient** tab in the VS Code sidebar and send any of the pre-configured requests under the `RentSpace API (Sprint 2)` collection.
+- **Run native test suite (Node test runner)**:
+  ```powershell
+  npm test
+  ```
 
 ### 3. Run Frontend (50% UI Standalone - No Backend Connection)
 
@@ -67,4 +67,4 @@ cd ../rentspace
 flutter pub get
 flutter run
 ```
-*(Unit tests and Widget tests are scheduled for Sprint 3 & Sprint 4).*
+*(Model, Controllers, Unit tests, and Complete frontend are scheduled for Sprint 3; Widget tests and full app connection are scheduled for Sprint 4).*

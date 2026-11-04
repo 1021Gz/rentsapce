@@ -203,3 +203,8 @@ List<BookingItem> createInitialBookings() => [
         paymentRef: 'PAY-1001',
       ),
     ];
+
+// 50% Standalone In-Memory Data for UI
+List<SpaceItem> sampleSpaces = createInitialSpaces();
+List<BookingItem> sampleBookings = createInitialBookings();
+UserAccount sampleUser = createInitialUsers().first;

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../controllers/rentspace_controller.dart';
 import '../../models/app_models.dart';
 
 class PaymentScreen extends StatefulWidget {
@@ -33,14 +32,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   void _confirmPayment() {
-    BookingController.payBooking(
-      widget.bookingRecord.id,
-      _refController.text.trim().isEmpty ? 'PAY-${widget.bookingRecord.id}' : _refController.text.trim(),
-      _mockSlipName,
-    );
+    final b = widget.bookingRecord;
+    b.paid = true;
+    b.paymentRef = _refController.text.trim().isEmpty ? 'PAY-${b.id}' : _refController.text.trim();
+    b.slipImageUrl = _mockSlipName;
+    b.status = 'confirmed';
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('ชำระเงินสำเร็จ! การจองได้รับการยืนยันแล้ว')),
+      const SnackBar(content: Text('ชำระเงินสำเร็จ! การจองได้รับการยืนยันแล้ว (จำลอง UI)')),
     );
 
     Navigator.pop(context);
@@ -86,7 +85,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
             ),
             const SizedBox(height: 16),
 
-            // PromptPay Card
             Card(
               color: Colors.blue.shade50,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -105,7 +103,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
             ),
             const SizedBox(height: 16),
 
-            // Reference & Slip Mock
             TextField(
               controller: _refController,
               decoration: const InputDecoration(

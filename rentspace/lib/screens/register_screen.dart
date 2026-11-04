@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../controllers/rentspace_controller.dart';
 import 'renter/renter_main_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -41,25 +40,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return;
     }
 
-    final outcome = AuthController.register(
-      username: _usernameController.text,
-      email: _emailController.text,
-      password: _passwordController.text,
-      fullName: _fullNameController.text,
-      phone: _phoneController.text,
-    );
-
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(outcome.message)),
+      const SnackBar(content: Text('สร้างบัญชีสำเร็จ (จำลอง UI)')),
     );
 
-    if (outcome.isSuccess) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => const RenterMainScreen()),
-        (route) => false,
-      );
-    }
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const RenterMainScreen()),
+      (route) => false,
+    );
   }
 
   @override

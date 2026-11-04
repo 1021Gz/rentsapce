@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../controllers/rentspace_controller.dart';
 import '../../models/app_models.dart';
 import 'space_detail_screen.dart';
 
@@ -23,7 +22,7 @@ class _RenterHomeTabState extends State<RenterHomeTab> {
   ];
 
   List<SpaceItem> get _filteredSpaces {
-    return globalSpaces.where((space) {
+    return sampleSpaces.where((space) {
       if (space.approvalStatus != 'approved' || !space.isActive) return false;
       if (_selectedCategory != 'ทั้งหมด' && space.categoryLabel != _selectedCategory) {
         return false;
@@ -48,7 +47,6 @@ class _RenterHomeTabState extends State<RenterHomeTab> {
       ),
       body: Column(
         children: [
-          // Search box
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: TextField(
@@ -61,8 +59,6 @@ class _RenterHomeTabState extends State<RenterHomeTab> {
               onChanged: (text) => setState(() => _searchText = text),
             ),
           ),
-
-          // Categories horizontal list
           SizedBox(
             height: 40,
             child: ListView.builder(
@@ -84,8 +80,6 @@ class _RenterHomeTabState extends State<RenterHomeTab> {
             ),
           ),
           const SizedBox(height: 8),
-
-          // Space Cards List
           Expanded(
             child: list.isEmpty
                 ? const Center(child: Text('ไม่พบพื้นที่ที่ค้นหา'))

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../controllers/rentspace_controller.dart';
 import '../../models/app_models.dart';
 import 'payment_screen.dart';
 
@@ -76,25 +75,30 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
       return;
     }
 
-    final outcome = BookingController.createBookingRequest(
-      space: widget.space,
-      start: _startDateTime,
-      end: _endDateTime,
+    final newBooking = BookingItem(
+      id: sampleBookings.length + 1,
+      renterId: 1002,
+      renterName: 'ณัฐ วงศ์ดี',
+      spaceId: widget.space.id,
+      spaceName: widget.space.name,
+      startDateTime: _startDateTime,
+      endDateTime: _endDateTime,
+      totalPrice: _totalPrice,
+      status: 'pending',
     );
+
+    sampleBookings.insert(0, newBooking);
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(outcome.message)),
+      const SnackBar(content: Text('ส่งคำขอจองพื้นที่สำเร็จ')),
     );
 
-    if (outcome.isSuccess && globalBookings.isNotEmpty) {
-      final latestBooking = globalBookings.first;
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => PaymentScreen(bookingRecord: latestBooking),
-        ),
-      );
-    }
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => PaymentScreen(bookingRecord: newBooking),
+      ),
+    );
   }
 
   @override

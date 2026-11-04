@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../controllers/rentspace_controller.dart';
 import '../../models/app_models.dart';
 import 'payment_screen.dart';
 
@@ -45,7 +44,8 @@ class _RenterMyBookingsTabState extends State<RenterMyBookingsTab> {
             TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('ยกเลิก')),
             ElevatedButton(
               onPressed: () {
-                BookingController.addReview(b.id, rating, commentController.text.trim());
+                b.rating = rating;
+                b.reviewComment = commentController.text.trim();
                 Navigator.pop(ctx);
                 setState(() {});
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -62,19 +62,15 @@ class _RenterMyBookingsTabState extends State<RenterMyBookingsTab> {
 
   @override
   Widget build(BuildContext context) {
-    final myBookings = globalBookings
-        .where((b) => b.renterId == (currentUser?.userId ?? 1002))
-        .toList();
-
     return Scaffold(
       appBar: AppBar(title: const Text('ประวัติการจองของฉัน')),
-      body: myBookings.isEmpty
+      body: sampleBookings.isEmpty
           ? const Center(child: Text('ยังไม่มีประวัติการจอง'))
           : ListView.builder(
               padding: const EdgeInsets.all(12),
-              itemCount: myBookings.length,
+              itemCount: sampleBookings.length,
               itemBuilder: (context, index) {
-                final b = myBookings[index];
+                final b = sampleBookings[index];
                 Color statusColor = Colors.orange;
                 String statusLabel = 'รอตรวจสอบ';
                 if (b.status == 'confirmed') {
@@ -140,7 +136,7 @@ class _RenterMyBookingsTabState extends State<RenterMyBookingsTab> {
                             if (b.status == 'pending')
                               TextButton(
                                 onPressed: () {
-                                  BookingController.updateBookingStatus(b.id, 'cancelled');
+                                  b.status = 'cancelled';
                                   setState(() {});
                                 },
                                 child: const Text('ยกเลิก', style: TextStyle(color: Colors.red)),

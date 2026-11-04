@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../controllers/rentspace_controller.dart';
+import '../../models/app_models.dart';
 import '../login_screen.dart';
 
 class RenterProfileTab extends StatefulWidget {
@@ -17,9 +17,9 @@ class _RenterProfileTabState extends State<RenterProfileTab> {
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: currentUser?.fullName ?? '');
-    _emailController = TextEditingController(text: currentUser?.email ?? '');
-    _phoneController = TextEditingController(text: currentUser?.phone ?? '');
+    _nameController = TextEditingController(text: sampleUser.fullName);
+    _emailController = TextEditingController(text: sampleUser.email);
+    _phoneController = TextEditingController(text: sampleUser.phone);
   }
 
   @override
@@ -31,18 +31,15 @@ class _RenterProfileTabState extends State<RenterProfileTab> {
   }
 
   void _saveProfile() {
-    if (currentUser != null) {
-      currentUser!.fullName = _nameController.text.trim();
-      currentUser!.email = _emailController.text.trim();
-      currentUser!.phone = _phoneController.text.trim();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('บันทึกข้อมูลโปรไฟล์เรียบร้อย')),
-      );
-    }
+    sampleUser.fullName = _nameController.text.trim();
+    sampleUser.email = _emailController.text.trim();
+    sampleUser.phone = _phoneController.text.trim();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('บันทึกข้อมูลโปรไฟล์เรียบร้อย (จำลอง UI)')),
+    );
   }
 
   void _logout() {
-    AuthController.logout();
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (_) => const LoginScreen()),
@@ -61,10 +58,10 @@ class _RenterProfileTabState extends State<RenterProfileTab> {
             const CircleAvatar(radius: 40, child: Icon(Icons.person, size: 50)),
             const SizedBox(height: 8),
             Text(
-              currentUser?.fullName ?? 'ผู้ใช้งาน',
+              sampleUser.fullName,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            Text('บทบาท: ${currentUser?.role ?? "renter"}', style: const TextStyle(color: Colors.grey)),
+            const Text('บทบาท: ผู้เช่า (Renter)', style: TextStyle(color: Colors.grey)),
             const SizedBox(height: 24),
             TextField(
               controller: _nameController,

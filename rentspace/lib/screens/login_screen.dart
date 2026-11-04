@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../controllers/rentspace_controller.dart';
 import 'renter/renter_main_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -47,34 +46,11 @@ class _LoginScreenState extends State<LoginScreen> {
         );
         return;
       }
-
-      final outcome = AuthController.register(
-        username: _usernameController.text,
-        email: _emailController.text,
-        password: _passwordController.text,
-        fullName: _fullNameController.text,
-      );
-
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(outcome.message)),
+        const SnackBar(content: Text('สร้างบัญชีสำเร็จ (จำลอง UI)')),
       );
-
-      if (outcome.isSuccess) {
-        _navigateToMain();
-      }
+      _navigateToMain();
     } else {
-      final outcome = AuthController.login(
-        username: _usernameController.text,
-        password: _passwordController.text,
-      );
-
-      if (!outcome.isSuccess) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(outcome.message)),
-        );
-        return;
-      }
-
       _navigateToMain();
     }
   }
@@ -119,7 +95,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 12),
                   ],
 
-                  // Username
                   TextFormField(
                     controller: _usernameController,
                     decoration: const InputDecoration(labelText: 'Username', prefixIcon: Icon(Icons.account_circle)),
@@ -127,7 +102,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 12),
 
-                  // Password
                   TextFormField(
                     controller: _passwordController,
                     obscureText: _hidePassword,
