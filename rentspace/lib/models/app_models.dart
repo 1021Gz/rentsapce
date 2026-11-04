@@ -117,40 +117,7 @@ class BookingItem {
   }
 }
 
-class AdminLogEntry {
-  int logId;
-  final int adminId;
-  final String adminName;
-  final String action;
-  final String targetType;
-  final int targetId;
-  final String details;
-  final DateTime createdAt;
-
-  AdminLogEntry({
-    required this.logId,
-    required this.adminId,
-    required this.adminName,
-    required this.action,
-    required this.targetType,
-    required this.targetId,
-    required this.details,
-    DateTime? createdAt,
-  }) : createdAt = createdAt ?? DateTime.now();
-
-  String get formattedTime => BookingItem.formatDt(createdAt);
-}
-
 List<UserAccount> createInitialUsers() => [
-      UserAccount(
-        userId: 1001,
-        username: 'owner01',
-        email: 'owner01@rentspace.test',
-        password: 'password',
-        fullName: 'ภูมิ ศรีสุข (เจ้าของ)',
-        phone: '089-876-5432',
-        role: 'owner',
-      ),
       UserAccount(
         userId: 1002,
         username: 'renter01',
@@ -159,15 +126,6 @@ List<UserAccount> createInitialUsers() => [
         fullName: 'ณัฐ วงศ์ดี (ผู้เช่า)',
         phone: '081-234-5678',
         role: 'renter',
-      ),
-      UserAccount(
-        userId: 1003,
-        username: 'admin01',
-        email: 'admin01@rentspace.test',
-        password: 'password',
-        fullName: 'ผู้ดูแลระบบ (Admin)',
-        phone: '02-999-8888',
-        role: 'admin',
       ),
     ];
 
@@ -226,7 +184,7 @@ List<SpaceItem> createInitialSpaces() => [
         rating: 4.6,
         description: 'พื้นที่จัดเวิร์กช็อปและสัมมนา รองรับได้สูงสุด 30 ที่นั่ง',
         imageUrls: ['assets/images/study.jpg'],
-        approvalStatus: 'pending',
+        approvalStatus: 'approved',
       ),
     ];
 
@@ -243,29 +201,5 @@ List<BookingItem> createInitialBookings() => [
         status: 'confirmed',
         paid: true,
         paymentRef: 'PAY-1001',
-      ),
-      BookingItem(
-        id: 2,
-        renterId: 1002,
-        spaceId: 2,
-        spaceName: 'สตูดิโอถ่ายภาพธรรมชาติ',
-        renterName: 'ณัฐ วงศ์ดี',
-        startDateTime: DateTime(2026, 11, 6, 13, 0),
-        endDateTime: DateTime(2026, 11, 6, 15, 0),
-        totalPrice: 1200.0,
-        status: 'pending',
-        paid: false,
-      ),
-    ];
-
-List<AdminLogEntry> createInitialAdminLogs() => [
-      AdminLogEntry(
-        logId: 1,
-        adminId: 1003,
-        adminName: 'ผู้ดูแลระบบ',
-        action: 'APPROVE_SPACE',
-        targetType: 'space',
-        targetId: 1,
-        details: 'อนุมัติห้องประชุมสว่างใจ',
       ),
     ];

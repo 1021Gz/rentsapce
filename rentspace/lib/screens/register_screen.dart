@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../controllers/rentspace_controller.dart';
-import 'owner/owner_dashboard_screen.dart';
 import 'renter/renter_main_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -19,7 +18,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  String _chosenRole = 'renter';
   bool _hidePassword = true;
 
   @override
@@ -49,20 +47,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
       password: _passwordController.text,
       fullName: _fullNameController.text,
       phone: _phoneController.text,
-      role: _chosenRole,
     );
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(outcome.message)),
     );
 
-    if (outcome.isSuccess && currentUser != null) {
-      final target = _chosenRole == 'owner'
-          ? const OwnerDashboardScreen()
-          : const RenterMainScreen();
+    if (outcome.isSuccess) {
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (_) => target),
+        MaterialPageRoute(builder: (_) => const RenterMainScreen()),
         (route) => false,
       );
     }
@@ -76,34 +70,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 450),
+            constraints: const BoxConstraints(maxWidth: 420),
             child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Text('เลือกบทบาทผู้ใช้งาน (Role)', style: TextStyle(fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ChoiceChip(
-                          label: const Center(child: Text('ผู้เช่า (Renter)')),
-                          selected: _chosenRole == 'renter',
-                          onSelected: (_) => setState(() => _chosenRole = 'renter'),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: ChoiceChip(
-                          label: const Center(child: Text('เจ้าของ (Owner)')),
-                          selected: _chosenRole == 'owner',
-                          onSelected: (_) => setState(() => _chosenRole = 'owner'),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
                   TextFormField(
                     controller: _fullNameController,
                     decoration: const InputDecoration(labelText: 'ชื่อ-นามสกุล', prefixIcon: Icon(Icons.badge)),

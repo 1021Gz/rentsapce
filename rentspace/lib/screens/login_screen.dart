@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import '../controllers/rentspace_controller.dart';
-import '../models/app_models.dart';
-import 'admin/admin_dashboard_screen.dart';
-import 'owner/owner_dashboard_screen.dart';
 import 'renter/renter_main_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -14,13 +11,12 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _usernameController = TextEditingController(text: 'renter01');
+  final _passwordController = TextEditingController(text: 'password');
   final _confirmPasswordController = TextEditingController();
   final _emailController = TextEditingController();
   final _fullNameController = TextEditingController();
 
-  String _chosenRole = 'renter';
   bool _isRegisterMode = false;
   bool _hidePassword = true;
 
@@ -34,25 +30,10 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _fillDemo(String username, String password) {
-    setState(() {
-      _usernameController.text = username;
-      _passwordController.text = password;
-    });
-  }
-
-  void _navigateToRoleScreen(UserAccount user) {
-    Widget target;
-    if (user.role == 'owner') {
-      target = const OwnerDashboardScreen();
-    } else if (user.role == 'admin') {
-      target = const AdminDashboardScreen();
-    } else {
-      target = const RenterMainScreen();
-    }
+  void _navigateToMain() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => target),
+      MaterialPageRoute(builder: (_) => const RenterMainScreen()),
     );
   }
 
@@ -72,15 +53,14 @@ class _LoginScreenState extends State<LoginScreen> {
         email: _emailController.text,
         password: _passwordController.text,
         fullName: _fullNameController.text,
-        role: _chosenRole,
       );
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(outcome.message)),
       );
 
-      if (outcome.isSuccess && currentUser != null) {
-        _navigateToRoleScreen(currentUser!);
+      if (outcome.isSuccess) {
+        _navigateToMain();
       }
     } else {
       final outcome = AuthController.login(
@@ -95,9 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
         return;
       }
 
-      if (currentUser != null) {
-        _navigateToRoleScreen(currentUser!);
-      }
+      _navigateToMain();
     }
   }
 
@@ -112,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 450),
+            constraints: const BoxConstraints(maxWidth: 420),
             child: Form(
               key: _formKey,
               child: Column(
@@ -121,67 +99,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   const Icon(Icons.meeting_room_rounded, size: 64, color: Colors.blue),
                   const SizedBox(height: 12),
                   Text(
-                    _isRegisterMode ? 'สร้างบัญชีผู้ใช้ใหม่' : 'เข้าสู่ระบบ RentSpace',
+                    _isRegisterMode ? 'สร้างบัญชีผู้เช่าใหม่' : 'เข้าสู่ระบบ RentSpace',
                     textAlign: TextAlign.center,
                     style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 16),
 
-                  // Demo quick login buttons
-                  if (!_isRegisterMode) ...[
-                    Wrap(
-                      spacing: 8,
-                      alignment: WrapAlignment.center,
-                      children: [
-                        ActionChip(
-                          label: const Text('Demo Renter'),
-                          onPressed: () => _fillDemo('renter01', 'password'),
-                        ),
-                        ActionChip(
-                          label: const Text('Demo Owner'),
-                          onPressed: () => _fillDemo('owner01', 'password'),
-                        ),
-                        ActionChip(
-                          label: const Text('Demo Admin'),
-                          onPressed: () => _fillDemo('admin01', 'password'),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-
-                  // Role selector in register mode
                   if (_isRegisterMode) ...[
-                    const Text('เลือกบทบาทผู้ใช้งาน (Role)', style: TextStyle(fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ChoiceChip(
-                            label: const Center(child: Text('ผู้เช่า (Renter)')),
-                            selected: _chosenRole == 'renter',
-                            onSelected: (_) => setState(() => _chosenRole = 'renter'),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: ChoiceChip(
-                            label: const Center(child: Text('เจ้าของ (Owner)')),
-                            selected: _chosenRole == 'owner',
-                            onSelected: (_) => setState(() => _chosenRole = 'owner'),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      _chosenRole == 'owner'
-                          ? 'ลงประกาศพื้นที่ จัดการราคา และคำขอจอง'
-                          : 'ค้นหา ดูรายละเอียด และจองพื้นที่ใช้งาน',
-                      style: const TextStyle(fontSize: 12, color: Colors.grey),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 12),
                     TextFormField(
                       controller: _fullNameController,
                       decoration: const InputDecoration(labelText: 'ชื่อ-นามสกุล', prefixIcon: Icon(Icons.person)),
@@ -219,7 +143,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 12),
 
-                  // Confirm password in register mode
                   if (_isRegisterMode) ...[
                     TextFormField(
                       controller: _confirmPasswordController,
@@ -230,10 +153,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       validator: (v) => (v == null || v.isEmpty) ? 'กรุณากรอกยืนยันรหัสผ่าน' : null,
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 12),
                   ],
 
-                  // Submit button
                   const SizedBox(height: 8),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -248,7 +170,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
 
-                  // Toggle mode button
                   TextButton(
                     onPressed: () {
                       setState(() {
