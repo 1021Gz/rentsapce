@@ -1,4 +1,5 @@
 SET FOREIGN_KEY_CHECKS=0;
+DROP TABLE IF EXISTS rent_space.app_session;
 DROP TABLE IF EXISTS rent_space.admin_logs;
 DROP TABLE IF EXISTS rent_space.bookings;
 DROP TABLE IF EXISTS rent_space.spaces;
