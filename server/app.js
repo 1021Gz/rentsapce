@@ -15,17 +15,17 @@ try {
 } catch (e) {
   // fallback
 }
-const con = require('./db_config');
+const pool = require('./db_config');
 
 const JWT_KEY = process.env.JWT_SECRET || 'rentspace-dev-jwt-secret';
 
-// Prevent process crash if XAMPP MySQL is not yet started
-con.on('error', (err) => {
-  console.error('MySQL connection error:', err.message);
+// Prevent process crash on connection pool error
+pool.on('error', (err) => {
+  console.error('MySQL connection pool error:', err.message);
 });
 
 const app = express();
-const db = con.promise();
+const db = pool.promise();
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });

@@ -179,11 +179,11 @@ async function runApiTestSuite() {
   );
 
   // Cleanup temporary test rows
-  const con = require("./db_config");
-  const db = con.promise();
+  const pool = require("./db_config");
+  const db = pool.promise();
   await db.query("DELETE FROM bookings WHERE booking_id = ?", [testBookingId]);
   await db.query("DELETE FROM spaces WHERE space_id = ?", [testSpaceId]);
-  con.end();
+  await pool.end();
 
   console.log("==================================================");
   console.log(`ALL ${passedCount} API TESTS PASSED SUCCESSFULLY!`);
