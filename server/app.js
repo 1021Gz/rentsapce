@@ -3,7 +3,21 @@ const cors = require('cors');
 const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
+let argon2;
+try {
+  argon2 = require('@node-rs/argon2');
+} catch (e) {
+  // fallback if binary not present
+}
+let jwt;
+try {
+  jwt = require('jsonwebtoken');
+} catch (e) {
+  // fallback
+}
 const con = require('./db_config');
+
+const JWT_KEY = process.env.JWT_SECRET || 'rentspace-dev-jwt-secret';
 
 // Prevent process crash if XAMPP MySQL is not yet started
 con.on('error', (err) => {
@@ -22,7 +36,22 @@ app.use(express.json({ limit: '15mb' }));
 app.use('/uploads', express.static(uploadsDir));
 
 function hashPassword(passwordString) {
+  if (argon2) {
+    try {
+      return argon2.hashSync(String(passwordString));
+    } catch (e) {}
+  }
   return crypto.createHash('sha256').update(String(passwordString)).digest('hex');
+}
+
+function verifyPassword(storedHash, plainPassword) {
+  if (storedHash && storedHash.startsWith('$argon2') && argon2) {
+    try {
+      return argon2.verifySync(storedHash, plainPassword);
+    } catch (e) {}
+  }
+  const incomingSha = crypto.createHash('sha256').update(String(plainPassword)).digest('hex');
+  return storedHash === plainPassword || storedHash === incomingSha;
 }
 
 //------------------- 1. Health & Sync -------------------
@@ -80,15 +109,26 @@ app.post(['/api/login', '/api/auth/login'], async (req, res) => {
       return res.status(401).json({ ok: false, message: 'Invalid username or password' });
     }
     const targetUser = matchingUsers[0];
-    const incomingHash = hashPassword(password);
-    const passwordMatched = targetUser.password_hash === incomingHash || targetUser.password_hash === password;
+    const passwordMatched = verifyPassword(targetUser.password_hash, password);
     if (!passwordMatched) {
       return res.status(401).json({ ok: false, message: 'Invalid username or password' });
     }
     const clientRole = targetUser.role === 'customer' ? 'renter' : targetUser.role;
+
+    let tokenString;
+    if (jwt) {
+      tokenString = jwt.sign(
+        { id: targetUser.user_id, username: targetUser.username, role: clientRole },
+        JWT_KEY,
+        { expiresIn: '8h' }
+      );
+    } else {
+      tokenString = `token_${targetUser.user_id}_${Date.now()}`;
+    }
+
     res.json({
       ok: true,
-      token: `token_${targetUser.user_id}_${Date.now()}`,
+      token: tokenString,
       user: { user_id: targetUser.user_id, username: targetUser.username, role: clientRole, name: targetUser.name },
     });
   } catch (err) {
