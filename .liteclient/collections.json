@@ -1,5 +1,234 @@
 [
   {
+    "id": "rentspace_col_afa843c8258a2afc",
+    "name": "RentSpace API (Sprint 2)",
+    "description": "RentSpace Express + MySQL API Test Collection (15 Endpoints)",
+    "variables": [
+      {
+        "id": "var_base_url_15",
+        "name": "baseUrl",
+        "initialValue": "http://localhost:3000",
+        "currentValue": "http://localhost:3000",
+        "type": "default",
+        "enabled": true
+      }
+    ],
+    "items": [
+      {
+        "id": "req_4fe0be350002f99b",
+        "name": "01. Health Check (MySQL Connection)",
+        "type": "request",
+        "method": "GET",
+        "url": "http://localhost:3000/api/health",
+        "headers": {},
+        "body": {
+          "mode": "none"
+        }
+      },
+      {
+        "id": "req_123eff0a7ccd1450",
+        "name": "02. Database Sync (All Entities)",
+        "type": "request",
+        "method": "GET",
+        "url": "http://localhost:3000/api/sync",
+        "headers": {},
+        "body": {
+          "mode": "none"
+        }
+      },
+      {
+        "id": "req_604501ac1a44280f",
+        "name": "03. Hash Password (Argon2id Utility)",
+        "type": "request",
+        "method": "GET",
+        "url": "http://localhost:3000/api/password/password123",
+        "headers": {},
+        "body": {
+          "mode": "none"
+        }
+      },
+      {
+        "id": "req_f8a8eaa5a3dc949c",
+        "name": "04. Register User (Customer/Renter)",
+        "type": "request",
+        "method": "POST",
+        "url": "http://localhost:3000/api/auth/register",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "mode": "raw",
+          "rawType": "json",
+          "value": "{\n  \"username\": \"liteclient_user\",\n  \"email\": \"liteclient@rentspace.test\",\n  \"password\": \"password123\",\n  \"full_name\": \"LiteClient Tester\",\n  \"role\": \"customer\"\n}"
+        }
+      },
+      {
+        "id": "req_64f08ad8e3218186",
+        "name": "05. Login User (Authenticate)",
+        "type": "request",
+        "method": "POST",
+        "url": "http://localhost:3000/api/auth/login",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "mode": "raw",
+          "rawType": "json",
+          "value": "{\n  \"username\": \"renter01\",\n  \"password\": \"password\"\n}"
+        }
+      },
+      {
+        "id": "req_960c2234d6dfaaac",
+        "name": "06. Search Spaces (by keyword)",
+        "type": "request",
+        "method": "GET",
+        "url": "http://localhost:3000/api/spaces?keyword=%E0%B8%AB%E0%B9%89%E0%B8%AD%E0%B8%87%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%8A%E0%B8%B8%E0%B8%A1",
+        "headers": {},
+        "params": {
+          "keyword": "ห้องประชุม"
+        },
+        "body": {
+          "mode": "none"
+        }
+      },
+      {
+        "id": "req_036f7e6f382b95fe",
+        "name": "07. Create Space Listing (Owner)",
+        "type": "request",
+        "method": "POST",
+        "url": "http://localhost:3000/api/spaces",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "mode": "raw",
+          "rawType": "json",
+          "value": "{\n  \"owner_id\": 1001,\n  \"title\": \"ห้องประชุม Co-Working สเปซใหม่\",\n  \"description\": \"พร้อมจอภาพ Smart TV และ Wi-Fi 1Gbps\",\n  \"location\": \"สุขุมวิท 21, กรุงเทพฯ\",\n  \"price_per_day\": 450,\n  \"category\": \"meeting_room\",\n  \"capacity\": 10,\n  \"image_url\": \"http://localhost:3000/uploads/meeting.jpg\"\n}"
+        }
+      },
+      {
+        "id": "req_d4ee4d35e0034fc2",
+        "name": "08. Update Space Details (Owner)",
+        "type": "request",
+        "method": "PATCH",
+        "url": "http://localhost:3000/api/spaces/2001",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "mode": "raw",
+          "rawType": "json",
+          "value": "{\n  \"price_per_day\": 380,\n  \"description\": \"ห้องประชุมพร้อมจอสมาร์ททีวีและอินเทอร์เน็ตความเร็วสูง (ราคาพิเศษ)\"\n}"
+        }
+      },
+      {
+        "id": "req_2894389279432432",
+        "name": "09. Toggle Space Active (Visibility)",
+        "type": "request",
+        "method": "PATCH",
+        "url": "http://localhost:3000/api/spaces/2001/active",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "mode": "raw",
+          "rawType": "json",
+          "value": "{\n  \"is_active\": true\n}"
+        }
+      },
+      {
+        "id": "req_0bb30b8d5a1b37eb",
+        "name": "10. Create Hourly Booking (Renter)",
+        "type": "request",
+        "method": "POST",
+        "url": "http://localhost:3000/api/bookings",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "mode": "raw",
+          "rawType": "json",
+          "value": "{\n  \"space_id\": 2001,\n  \"customer_id\": 1002,\n  \"start_date\": \"2026-11-26\",\n  \"end_date\": \"2026-11-26\",\n  \"start_time\": \"2026-11-26 14:00:00\",\n  \"end_time\": \"2026-11-26 17:00:00\",\n  \"total_price\": 1140\n}"
+        }
+      },
+      {
+        "id": "req_a221f757f12e8735",
+        "name": "11. Confirm Booking (Owner)",
+        "type": "request",
+        "method": "PATCH",
+        "url": "http://localhost:3000/api/bookings/3001/status",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "mode": "raw",
+          "rawType": "json",
+          "value": "{\n  \"status\": \"confirmed\"\n}"
+        }
+      },
+      {
+        "id": "req_a5bc9b532e3b2e75",
+        "name": "12. Pay Booking with Slip Ref (Renter)",
+        "type": "request",
+        "method": "PATCH",
+        "url": "http://localhost:3000/api/bookings/3001/pay",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "mode": "raw",
+          "rawType": "json",
+          "value": "{\n  \"payment_ref\": \"SLIP-PROMPT-7788\",\n  \"slip_image_url\": \"http://localhost:3000/uploads/meeting.jpg\"\n}"
+        }
+      },
+      {
+        "id": "req_6c9f4c2b061abcb2",
+        "name": "13. Submit Review & Rating (Renter)",
+        "type": "request",
+        "method": "POST",
+        "url": "http://localhost:3000/api/bookings/3001/review",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "mode": "raw",
+          "rawType": "json",
+          "value": "{\n  \"rating\": 5,\n  \"review_comment\": \"ห้องประชุมเงียบสงบ แอร์เย็นฉ่ำ อุปกรณ์พร้อมใช้งาน 10/10\"\n}"
+        }
+      },
+      {
+        "id": "req_16a0d0f3d5cfae28",
+        "name": "14. Admin Approve Space (Admin)",
+        "type": "request",
+        "method": "PATCH",
+        "url": "http://localhost:3000/api/admin/spaces/2005/approval",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "mode": "raw",
+          "rawType": "json",
+          "value": "{\n  \"status\": \"approved\"\n}"
+        }
+      },
+      {
+        "id": "req_aa03eac993d98d63",
+        "name": "15. Upload Image File (Base64)",
+        "type": "request",
+        "method": "POST",
+        "url": "http://localhost:3000/api/upload",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "mode": "raw",
+          "rawType": "json",
+          "value": "{\n  \"filename\": \"slip_sample.png\",\n  \"base64Data\": \"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==\"\n}"
+        }
+      }
+    ]
+  },
+  {
     "id": "rentspace_col_sprint2_full",
     "name": "RentSpace API (Sprint 2)",
     "description": "Complete RentSpace Express + MySQL API Test Collection (Argon2id & JWT)",
