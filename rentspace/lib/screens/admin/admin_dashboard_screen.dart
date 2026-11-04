@@ -289,6 +289,17 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
             },
           ),
         ],
+        if (space.approvalStatus == 'rejected') ...[
+          const SizedBox(width: 4),
+          IconButton(
+            tooltip: 'เปิดพื้นที่คืน (อนุมัติอีกครั้ง)',
+            icon: const Icon(Icons.visibility, color: Colors.green, size: 20),
+            onPressed: () {
+              MockStore.approveSpace(space, 'approved');
+              setState(() {});
+            },
+          ),
+        ],
       ],
     );
   }
