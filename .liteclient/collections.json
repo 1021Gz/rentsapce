@@ -1,11 +1,11 @@
 [
   {
-    "id": "rentspace_col_afa843c8258a2afc",
+    "id": "rentspace_col_sprint2_full",
     "name": "RentSpace API (Sprint 2)",
-    "description": "RentSpace Express + MySQL API Test Collection (15 Endpoints)",
+    "description": "RentSpace API Test Collection (ภาษาไทยเข้าใจง่าย)",
     "variables": [
       {
-        "id": "var_base_url_15",
+        "id": "var_base_url",
         "name": "baseUrl",
         "initialValue": "http://localhost:3000",
         "currentValue": "http://localhost:3000",
@@ -15,8 +15,8 @@
     ],
     "items": [
       {
-        "id": "req_4fe0be350002f99b",
-        "name": "01. Health Check (MySQL Connection)",
+        "id": "req_01_health",
+        "name": "01. เช็คเซิร์ฟเวอร์ต่อ MySQL (Health Check)",
         "type": "request",
         "method": "GET",
         "url": "http://localhost:3000/api/health",
@@ -26,8 +26,8 @@
         }
       },
       {
-        "id": "req_123eff0a7ccd1450",
-        "name": "02. Database Sync (All Entities)",
+        "id": "req_02_sync",
+        "name": "02. ดึงข้อมูลรวมทุกตาราง (Sync DB)",
         "type": "request",
         "method": "GET",
         "url": "http://localhost:3000/api/sync",
@@ -37,8 +37,8 @@
         }
       },
       {
-        "id": "req_604501ac1a44280f",
-        "name": "03. Hash Password (Argon2id Utility)",
+        "id": "req_03_hash",
+        "name": "03. แปลงรหัสผ่านเป็น Hash (Argon2id)",
         "type": "request",
         "method": "GET",
         "url": "http://localhost:3000/api/password/password123",
@@ -48,8 +48,8 @@
         }
       },
       {
-        "id": "req_f8a8eaa5a3dc949c",
-        "name": "04. Register User (Customer/Renter)",
+        "id": "req_04_register",
+        "name": "04. สมัครสมาชิกคนเช่าใหม่ (Register)",
         "type": "request",
         "method": "POST",
         "url": "http://localhost:3000/api/auth/register",
@@ -63,8 +63,8 @@
         }
       },
       {
-        "id": "req_64f08ad8e3218186",
-        "name": "05. Login User (Authenticate)",
+        "id": "req_05_login_renter",
+        "name": "05. ล็อกอินฝั่งคนเช่า (Login Renter)",
         "type": "request",
         "method": "POST",
         "url": "http://localhost:3000/api/auth/login",
@@ -78,22 +78,60 @@
         }
       },
       {
-        "id": "req_960c2234d6dfaaac",
-        "name": "06. Search Spaces (by keyword)",
+        "id": "req_06_login_admin",
+        "name": "06. ล็อกอินฝั่งแอดมิน (Login Admin)",
+        "type": "request",
+        "method": "POST",
+        "url": "http://localhost:3000/api/auth/login",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "mode": "raw",
+          "rawType": "json",
+          "value": "{\n  \"username\": \"admin01\",\n  \"password\": \"password\"\n}"
+        }
+      },
+      {
+        "id": "req_07_spaces_all",
+        "name": "07. ดูห้องเช่าทั้งหมด (Get All Spaces)",
         "type": "request",
         "method": "GET",
-        "url": "http://localhost:3000/api/spaces?keyword=%E0%B8%AB%E0%B9%89%E0%B8%AD%E0%B8%87%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%8A%E0%B8%B8%E0%B8%A1",
+        "url": "http://localhost:3000/api/spaces",
+        "headers": {},
+        "body": {
+          "mode": "none"
+        }
+      },
+      {
+        "id": "req_08_spaces_search",
+        "name": "08. ค้นหาห้องประชุม (Search Spaces)",
+        "type": "request",
+        "method": "GET",
+        "url": "http://localhost:3000/api/spaces?keyword=%E0%B8%AB%E0%B9%89%E0%B8%AD%E0%B8%87%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%8A%E0%B8%B8%E0%B8%A1&category=meeting_room",
         "headers": {},
         "params": {
-          "keyword": "ห้องประชุม"
+          "keyword": "ห้องประชุม",
+          "category": "meeting_room"
         },
         "body": {
           "mode": "none"
         }
       },
       {
-        "id": "req_036f7e6f382b95fe",
-        "name": "07. Create Space Listing (Owner)",
+        "id": "req_09_space_detail",
+        "name": "09. กดดูรายละเอียดห้องรายตัว (Space Details)",
+        "type": "request",
+        "method": "GET",
+        "url": "http://localhost:3000/api/spaces/2001",
+        "headers": {},
+        "body": {
+          "mode": "none"
+        }
+      },
+      {
+        "id": "req_10_space_create",
+        "name": "10. เจ้าของลงประกาศห้องใหม่ (Create Space)",
         "type": "request",
         "method": "POST",
         "url": "http://localhost:3000/api/spaces",
@@ -107,8 +145,8 @@
         }
       },
       {
-        "id": "req_d4ee4d35e0034fc2",
-        "name": "08. Update Space Details (Owner)",
+        "id": "req_11_space_update",
+        "name": "11. เจ้าของแก้ราคาและข้อมูลห้อง (Update Space)",
         "type": "request",
         "method": "PATCH",
         "url": "http://localhost:3000/api/spaces/2001",
@@ -122,8 +160,8 @@
         }
       },
       {
-        "id": "req_2894389279432432",
-        "name": "09. Toggle Space Active (Visibility)",
+        "id": "req_12_space_active",
+        "name": "12. เจ้าของเปิด/ปิดรับจองห้อง (Toggle Active)",
         "type": "request",
         "method": "PATCH",
         "url": "http://localhost:3000/api/spaces/2001/active",
@@ -137,68 +175,8 @@
         }
       },
       {
-        "id": "req_0bb30b8d5a1b37eb",
-        "name": "10. Create Hourly Booking (Renter)",
-        "type": "request",
-        "method": "POST",
-        "url": "http://localhost:3000/api/bookings",
-        "headers": {
-          "Content-Type": "application/json"
-        },
-        "body": {
-          "mode": "raw",
-          "rawType": "json",
-          "value": "{\n  \"space_id\": 2001,\n  \"customer_id\": 1002,\n  \"start_date\": \"2026-11-26\",\n  \"end_date\": \"2026-11-26\",\n  \"start_time\": \"2026-11-26 14:00:00\",\n  \"end_time\": \"2026-11-26 17:00:00\",\n  \"total_price\": 1140\n}"
-        }
-      },
-      {
-        "id": "req_a221f757f12e8735",
-        "name": "11. Confirm Booking (Owner)",
-        "type": "request",
-        "method": "PATCH",
-        "url": "http://localhost:3000/api/bookings/3001/status",
-        "headers": {
-          "Content-Type": "application/json"
-        },
-        "body": {
-          "mode": "raw",
-          "rawType": "json",
-          "value": "{\n  \"status\": \"confirmed\"\n}"
-        }
-      },
-      {
-        "id": "req_a5bc9b532e3b2e75",
-        "name": "12. Pay Booking with Slip Ref (Renter)",
-        "type": "request",
-        "method": "PATCH",
-        "url": "http://localhost:3000/api/bookings/3001/pay",
-        "headers": {
-          "Content-Type": "application/json"
-        },
-        "body": {
-          "mode": "raw",
-          "rawType": "json",
-          "value": "{\n  \"payment_ref\": \"SLIP-PROMPT-7788\",\n  \"slip_image_url\": \"http://localhost:3000/uploads/meeting.jpg\"\n}"
-        }
-      },
-      {
-        "id": "req_6c9f4c2b061abcb2",
-        "name": "13. Submit Review & Rating (Renter)",
-        "type": "request",
-        "method": "POST",
-        "url": "http://localhost:3000/api/bookings/3001/review",
-        "headers": {
-          "Content-Type": "application/json"
-        },
-        "body": {
-          "mode": "raw",
-          "rawType": "json",
-          "value": "{\n  \"rating\": 5,\n  \"review_comment\": \"ห้องประชุมเงียบสงบ แอร์เย็นฉ่ำ อุปกรณ์พร้อมใช้งาน 10/10\"\n}"
-        }
-      },
-      {
-        "id": "req_16a0d0f3d5cfae28",
-        "name": "14. Admin Approve Space (Admin)",
+        "id": "req_13_admin_approve",
+        "name": "13. แอดมินกดอนุมัติห้องขึ้นแอป (Approve Space)",
         "type": "request",
         "method": "PATCH",
         "url": "http://localhost:3000/api/admin/spaces/2005/approval",
@@ -212,8 +190,108 @@
         }
       },
       {
-        "id": "req_aa03eac993d98d63",
-        "name": "15. Upload Image File (Base64)",
+        "id": "req_14_bookings_get",
+        "name": "14. ดูประวัติการจองทั้งหมด (Get Bookings)",
+        "type": "request",
+        "method": "GET",
+        "url": "http://localhost:3000/api/bookings?user_id=1002",
+        "headers": {},
+        "params": {
+          "user_id": "1002"
+        },
+        "body": {
+          "mode": "none"
+        }
+      },
+      {
+        "id": "req_15_booking_create",
+        "name": "15. คนเช่าส่งคำขอจองห้อง (Book Space)",
+        "type": "request",
+        "method": "POST",
+        "url": "http://localhost:3000/api/bookings",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "mode": "raw",
+          "rawType": "json",
+          "value": "{\n  \"space_id\": 2001,\n  \"customer_id\": 1002,\n  \"start_date\": \"2026-11-26\",\n  \"end_date\": \"2026-11-26\",\n  \"start_time\": \"2026-11-26 14:00:00\",\n  \"end_time\": \"2026-11-26 17:00:00\",\n  \"total_price\": 1140\n}"
+        }
+      },
+      {
+        "id": "req_16_booking_confirm",
+        "name": "16. เจ้าของกดยืนยันรับการจอง (Confirm Booking)",
+        "type": "request",
+        "method": "PATCH",
+        "url": "http://localhost:3000/api/bookings/3001/status",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "mode": "raw",
+          "rawType": "json",
+          "value": "{\n  \"status\": \"confirmed\"\n}"
+        }
+      },
+      {
+        "id": "req_17_booking_pay",
+        "name": "17. คนเช่าแจ้งโอนเงินแนบสลิป (Pay Booking)",
+        "type": "request",
+        "method": "PATCH",
+        "url": "http://localhost:3000/api/bookings/3001/pay",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "mode": "raw",
+          "rawType": "json",
+          "value": "{\n  \"payment_ref\": \"SLIP-PROMPT-7788\",\n  \"slip_image_url\": \"http://localhost:3000/uploads/meeting.jpg\"\n}"
+        }
+      },
+      {
+        "id": "req_18_booking_review",
+        "name": "18. คนเช่าให้ดาวและเขียนรีวิว (Review Space)",
+        "type": "request",
+        "method": "POST",
+        "url": "http://localhost:3000/api/bookings/3001/review",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "mode": "raw",
+          "rawType": "json",
+          "value": "{\n  \"rating\": 5,\n  \"review_comment\": \"ห้องประชุมเงียบสงบ แอร์เย็นฉ่ำ อุปกรณ์พร้อมใช้งาน 10/10\"\n}"
+        }
+      },
+      {
+        "id": "req_19_admin_log",
+        "name": "19. แอดมินบันทึกประวัติกิจกรรม (Admin Log)",
+        "type": "request",
+        "method": "POST",
+        "url": "http://localhost:3000/api/admin/logs",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "mode": "raw",
+          "rawType": "json",
+          "value": "{\n  \"admin_id\": 1003,\n  \"admin_name\": \"ผู้ดูแลระบบ\",\n  \"action\": \"APPROVE_SPACE\",\n  \"target_type\": \"space\",\n  \"target_id\": 2005,\n  \"details\": \"อนุมัติพื้นที่จัดเวิร์กช็อป\"\n}"
+        }
+      },
+      {
+        "id": "req_20_uploads_list",
+        "name": "20. ดูรายชื่อรูปภาพในระบบ (List Images)",
+        "type": "request",
+        "method": "GET",
+        "url": "http://localhost:3000/api/uploads",
+        "headers": {},
+        "body": {
+          "mode": "none"
+        }
+      },
+      {
+        "id": "req_21_upload_image",
+        "name": "21. อัปโหลดรูปภาพขึ้นเซิร์ฟเวอร์ (Upload Image)",
         "type": "request",
         "method": "POST",
         "url": "http://localhost:3000/api/upload",
@@ -229,14 +307,15 @@
     ]
   },
   {
-    "id": "rentspace_col_sprint2_full",
+    "id": "rentspace_col_afa843c8258a2afc",
     "name": "RentSpace API (Sprint 2)",
-    "description": "Complete RentSpace Express + MySQL API Test Collection (Argon2id & JWT)",
+    "description": "RentSpace API Test Collection (ภาษาไทยเข้าใจง่าย)",
     "variables": [
       {
         "id": "var_base_url",
         "name": "baseUrl",
         "initialValue": "http://localhost:3000",
+        "currentValue": "http://localhost:3000",
         "type": "default",
         "enabled": true
       }
@@ -244,7 +323,7 @@
     "items": [
       {
         "id": "req_01_health",
-        "name": "01. Health Check (MySQL Connection)",
+        "name": "01. เช็คเซิร์ฟเวอร์ต่อ MySQL (Health Check)",
         "type": "request",
         "method": "GET",
         "url": "http://localhost:3000/api/health",
@@ -255,7 +334,7 @@
       },
       {
         "id": "req_02_sync",
-        "name": "02. Database Sync (All Entities)",
+        "name": "02. ดึงข้อมูลรวมทุกตาราง (Sync DB)",
         "type": "request",
         "method": "GET",
         "url": "http://localhost:3000/api/sync",
@@ -266,7 +345,7 @@
       },
       {
         "id": "req_03_hash",
-        "name": "03. Hash Password (Argon2id Utility)",
+        "name": "03. แปลงรหัสผ่านเป็น Hash (Argon2id)",
         "type": "request",
         "method": "GET",
         "url": "http://localhost:3000/api/password/password123",
@@ -277,7 +356,7 @@
       },
       {
         "id": "req_04_register",
-        "name": "04. Register User (Customer/Renter)",
+        "name": "04. สมัครสมาชิกคนเช่าใหม่ (Register)",
         "type": "request",
         "method": "POST",
         "url": "http://localhost:3000/api/auth/register",
@@ -287,12 +366,12 @@
         "body": {
           "mode": "raw",
           "rawType": "json",
-          "value": "{\n  \"username\": \"renter_new\",\n  \"email\": \"renter_new@rentspace.test\",\n  \"password\": \"password123\",\n  \"full_name\": \"ผู้เช่า ทดสอบระบบ\",\n  \"role\": \"customer\"\n}"
+          "value": "{\n  \"username\": \"liteclient_user\",\n  \"email\": \"liteclient@rentspace.test\",\n  \"password\": \"password123\",\n  \"full_name\": \"LiteClient Tester\",\n  \"role\": \"customer\"\n}"
         }
       },
       {
         "id": "req_05_login_renter",
-        "name": "05. Login Renter (Issue JWT Token)",
+        "name": "05. ล็อกอินฝั่งคนเช่า (Login Renter)",
         "type": "request",
         "method": "POST",
         "url": "http://localhost:3000/api/auth/login",
@@ -307,7 +386,7 @@
       },
       {
         "id": "req_06_login_admin",
-        "name": "06. Login Admin (Issue JWT Token)",
+        "name": "06. ล็อกอินฝั่งแอดมิน (Login Admin)",
         "type": "request",
         "method": "POST",
         "url": "http://localhost:3000/api/auth/login",
@@ -322,7 +401,7 @@
       },
       {
         "id": "req_07_spaces_all",
-        "name": "07. Get All Spaces",
+        "name": "07. ดูห้องเช่าทั้งหมด (Get All Spaces)",
         "type": "request",
         "method": "GET",
         "url": "http://localhost:3000/api/spaces",
@@ -333,10 +412,10 @@
       },
       {
         "id": "req_08_spaces_search",
-        "name": "08. Search Spaces (by keyword & category)",
+        "name": "08. ค้นหาห้องประชุม (Search Spaces)",
         "type": "request",
         "method": "GET",
-        "url": "http://localhost:3000/api/spaces?keyword=ห้องประชุม&category=meeting_room",
+        "url": "http://localhost:3000/api/spaces?keyword=%E0%B8%AB%E0%B9%89%E0%B8%AD%E0%B8%87%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%8A%E0%B8%B8%E0%B8%A1&category=meeting_room",
         "headers": {},
         "params": {
           "keyword": "ห้องประชุม",
@@ -348,7 +427,7 @@
       },
       {
         "id": "req_09_space_detail",
-        "name": "09. Get Space Details by ID",
+        "name": "09. กดดูรายละเอียดห้องรายตัว (Space Details)",
         "type": "request",
         "method": "GET",
         "url": "http://localhost:3000/api/spaces/2001",
@@ -359,7 +438,7 @@
       },
       {
         "id": "req_10_space_create",
-        "name": "10. Create Space Listing (Owner)",
+        "name": "10. เจ้าของลงประกาศห้องใหม่ (Create Space)",
         "type": "request",
         "method": "POST",
         "url": "http://localhost:3000/api/spaces",
@@ -374,7 +453,7 @@
       },
       {
         "id": "req_11_space_update",
-        "name": "11. Update Space Details (Owner)",
+        "name": "11. เจ้าของแก้ราคาและข้อมูลห้อง (Update Space)",
         "type": "request",
         "method": "PATCH",
         "url": "http://localhost:3000/api/spaces/2001",
@@ -389,7 +468,7 @@
       },
       {
         "id": "req_12_space_active",
-        "name": "12. Toggle Space Active (Visibility)",
+        "name": "12. เจ้าของเปิด/ปิดรับจองห้อง (Toggle Active)",
         "type": "request",
         "method": "PATCH",
         "url": "http://localhost:3000/api/spaces/2001/active",
@@ -404,7 +483,7 @@
       },
       {
         "id": "req_13_admin_approve",
-        "name": "13. Admin Approve Space (Admin)",
+        "name": "13. แอดมินกดอนุมัติห้องขึ้นแอป (Approve Space)",
         "type": "request",
         "method": "PATCH",
         "url": "http://localhost:3000/api/admin/spaces/2005/approval",
@@ -419,7 +498,7 @@
       },
       {
         "id": "req_14_bookings_get",
-        "name": "14. Get Bookings List (Renter/Owner)",
+        "name": "14. ดูประวัติการจองทั้งหมด (Get Bookings)",
         "type": "request",
         "method": "GET",
         "url": "http://localhost:3000/api/bookings?user_id=1002",
@@ -433,7 +512,7 @@
       },
       {
         "id": "req_15_booking_create",
-        "name": "15. Create Hourly Booking (Renter)",
+        "name": "15. คนเช่าส่งคำขอจองห้อง (Book Space)",
         "type": "request",
         "method": "POST",
         "url": "http://localhost:3000/api/bookings",
@@ -448,7 +527,7 @@
       },
       {
         "id": "req_16_booking_confirm",
-        "name": "16. Confirm Booking Status (Owner)",
+        "name": "16. เจ้าของกดยืนยันรับการจอง (Confirm Booking)",
         "type": "request",
         "method": "PATCH",
         "url": "http://localhost:3000/api/bookings/3001/status",
@@ -463,7 +542,7 @@
       },
       {
         "id": "req_17_booking_pay",
-        "name": "17. Pay Booking with Slip Ref (Renter)",
+        "name": "17. คนเช่าแจ้งโอนเงินแนบสลิป (Pay Booking)",
         "type": "request",
         "method": "PATCH",
         "url": "http://localhost:3000/api/bookings/3001/pay",
@@ -478,7 +557,7 @@
       },
       {
         "id": "req_18_booking_review",
-        "name": "18. Submit Review & Rating (Renter)",
+        "name": "18. คนเช่าให้ดาวและเขียนรีวิว (Review Space)",
         "type": "request",
         "method": "POST",
         "url": "http://localhost:3000/api/bookings/3001/review",
@@ -493,7 +572,7 @@
       },
       {
         "id": "req_19_admin_log",
-        "name": "19. Record Admin Action Log (Admin)",
+        "name": "19. แอดมินบันทึกประวัติกิจกรรม (Admin Log)",
         "type": "request",
         "method": "POST",
         "url": "http://localhost:3000/api/admin/logs",
@@ -508,7 +587,7 @@
       },
       {
         "id": "req_20_uploads_list",
-        "name": "20. List Uploaded Images",
+        "name": "20. ดูรายชื่อรูปภาพในระบบ (List Images)",
         "type": "request",
         "method": "GET",
         "url": "http://localhost:3000/api/uploads",
@@ -519,7 +598,7 @@
       },
       {
         "id": "req_21_upload_image",
-        "name": "21. Upload Image File (Base64)",
+        "name": "21. อัปโหลดรูปภาพขึ้นเซิร์ฟเวอร์ (Upload Image)",
         "type": "request",
         "method": "POST",
         "url": "http://localhost:3000/api/upload",
