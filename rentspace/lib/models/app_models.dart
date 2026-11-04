@@ -127,6 +127,24 @@ List<UserAccount> createInitialUsers() => [
         phone: '081-234-5678',
         role: 'renter',
       ),
+      UserAccount(
+        userId: 1001,
+        username: 'owner01',
+        email: 'owner01@rentspace.test',
+        password: 'password',
+        fullName: 'ภูมิ ศรีสุข (เจ้าของ)',
+        phone: '089-876-5432',
+        role: 'owner',
+      ),
+      UserAccount(
+        userId: 1003,
+        username: 'admin01',
+        email: 'admin01@rentspace.test',
+        password: 'password',
+        fullName: 'ผู้ดูแลระบบ (Admin)',
+        phone: '02-999-8888',
+        role: 'admin',
+      ),
     ];
 
 List<SpaceItem> createInitialSpaces() => [
