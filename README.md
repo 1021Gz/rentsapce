@@ -19,7 +19,6 @@ rentspace/
 │   ├── db_config.js                               # MySQL2 connection setup
 │   ├── init_db.js                                 # Database auto-initialization script
 │   ├── schema.sql                                 # Complete DDL schema & sample seeds
-│   ├── test/app.test.js                           # Node.js native test suite (npm test)
 │   ├── test-api.js                                # Automated E2E API test suite
 │   ├── RentSpace_Sprint2_Postman_Collection.json  # Postman Collection v2.1
 │   ├── RentSpace_LiteClient_Collection.json       # LiteClient Collection
@@ -52,10 +51,6 @@ npm start
 - **Run in VS Code LiteClient**:
   Open the **LiteClient** tab in the VS Code sidebar and send any of the pre-configured requests under the `RentSpace API (Sprint 2)` collection.
 - **Run automated E2E API test**:
-  ```powershell
-  npm run test:api
-  ```
-- **Run native test suite (Node test runner)**:
   ```powershell
   npm test
   ```

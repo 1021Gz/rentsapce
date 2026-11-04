@@ -49,7 +49,7 @@ npm test
 
 `npm run dev` enables automatic restart when files change (`node --watch app.js`).
 `npm run db:init` resets and repopulates the `rent_space` database using `schema.sql`.
-`npm test` runs the automated unit & integration test suite (`test/app.test.js`) using Node's native test runner.
+`npm test` runs the automated API test suite (`test-api.js`).
 
 ## Supporting files
 
@@ -57,4 +57,6 @@ npm test
 - `db_config.js`: MySQL connection configuration
 - `init_db.js`: Database initialization script
 - `schema.sql`: Complete DDL schema and initial seed data
-- `test/app.test.js`: Automated test suite
+- `test-api.js`: Automated API test suite
+- `RentSpace_LiteClient_Collection.json`: LiteClient API test collection
+- `RentSpace_Sprint2_Postman_Collection.json`: Postman API test collection

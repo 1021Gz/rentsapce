@@ -7,8 +7,7 @@
     "start": "node app.js",
     "dev": "node --watch app.js",
     "db:init": "node init_db.js",
-    "test": "node --test test/app.test.js",
-    "test:api": "node test-api.js"
+    "test": "node test-api.js"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.2",
