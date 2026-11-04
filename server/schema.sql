@@ -1,5 +1,4 @@
 SET FOREIGN_KEY_CHECKS=0;
-DROP TABLE IF EXISTS rent_space.app_session;
 DROP TABLE IF EXISTS rent_space.admin_logs;
 DROP TABLE IF EXISTS rent_space.bookings;
 DROP TABLE IF EXISTS rent_space.spaces;
@@ -91,15 +90,7 @@ CREATE TABLE `admin_logs` (
   PRIMARY KEY (`log_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
--- Table structure for table `app_session`
--- --------------------------------------------------------
-CREATE TABLE `app_session` (
-  `session_key` varchar(50) NOT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  PRIMARY KEY (`session_key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 -- --------------------------------------------------------
 -- Dumping data for tables
