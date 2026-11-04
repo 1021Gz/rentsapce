@@ -1,3 +1,5 @@
+const fs = require('node:fs');
+const path = require('node:path');
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const { once } = require('node:events');
@@ -11,6 +13,8 @@ const suffix = Date.now().toString(36).slice(-6);
 const createdSpaceIds = new Set();
 const createdBookingIds = new Set();
 const createdUserIds = new Set();
+const createdLogIds = new Set();
+const createdFiles = new Set();
 
 test.before(async () => {
   await database.query('SELECT 1');
@@ -20,6 +24,9 @@ test.before(async () => {
 });
 
 test.after(async () => {
+  for (const logId of createdLogIds) {
+    await database.query('DELETE FROM admin_logs WHERE log_id = ?', [logId]);
+  }
   for (const bId of createdBookingIds) {
     await database.query('DELETE FROM bookings WHERE booking_id = ?', [bId]);
   }
@@ -28,6 +35,11 @@ test.after(async () => {
   }
   for (const uId of createdUserIds) {
     await database.query('DELETE FROM users WHERE user_id = ?', [uId]);
+  }
+  for (const filePath of createdFiles) {
+    try {
+      fs.unlinkSync(filePath);
+    } catch (_) {}
   }
   if (server) {
     server.closeAllConnections();
@@ -195,4 +207,67 @@ test('7. Create booking, confirm, pay with slip, and submit review', async () =>
     }),
   });
   assert.equal(reviewRes.status, 200);
+
+  // List bookings by user_id
+  const listRes = await fetch(`${base}/bookings?user_id=1002`);
+  assert.equal(listRes.status, 200);
+  const bookingsList = await listRes.json();
+  assert(bookingsList.some((b) => b.booking_id === bookingId));
+});
+
+test('8. Space detail, admin approval, admin logs, and image upload', async () => {
+  const [spaces] = await database.query('SELECT space_id FROM spaces LIMIT 1');
+  const spaceId = spaces[0].space_id;
+
+  // Get space detail by ID
+  const detailRes = await fetch(`${base}/spaces/${spaceId}`);
+  assert.equal(detailRes.status, 200);
+  const detailData = await detailRes.json();
+  assert.equal(detailData.space_id, spaceId);
+
+  // Admin approve space
+  const approveRes = await fetch(`${base}/admin/spaces/${spaceId}/approval`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status: 'approved' }),
+  });
+  assert.equal(approveRes.status, 200);
+
+  // Record admin log
+  const logRes = await fetch(`${base}/admin/logs`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      admin_id: 1003,
+      admin_name: 'Admin Test',
+      action: 'APPROVE_SPACE',
+      target_type: 'space',
+      target_id: spaceId,
+      details: 'Approved in test suite',
+    }),
+  });
+  assert.equal(logRes.status, 201);
+  const logData = await logRes.json();
+  createdLogIds.add(logData.log_id);
+
+  // Upload image (1x1 PNG base64)
+  const uploadRes = await fetch(`${base}/upload`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      filename: 'test.png',
+      base64Data:
+        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+    }),
+  });
+  assert.equal(uploadRes.status, 201);
+  const uploadData = await uploadRes.json();
+  createdFiles.add(path.join(__dirname, '..', 'uploads', uploadData.filename));
+
+  // List uploaded images
+  const uploadsListRes = await fetch(`${base}/uploads`);
+  assert.equal(uploadsListRes.status, 200);
+  const uploadsListData = await uploadsListRes.json();
+  assert.equal(uploadsListData.ok, true);
+  assert(Array.isArray(uploadsListData.files));
 });

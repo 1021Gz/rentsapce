@@ -287,6 +287,21 @@
         "body": {
           "mode": "none"
         }
+      },
+      {
+        "id": "req_21_upload_image",
+        "name": "21. Upload Image File (Base64)",
+        "type": "request",
+        "method": "POST",
+        "url": "http://localhost:3000/api/upload",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "mode": "raw",
+          "rawType": "json",
+          "value": "{\n  \"filename\": \"slip_sample.png\",\n  \"base64Data\": \"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==\"\n}"
+        }
       }
     ]
   }
