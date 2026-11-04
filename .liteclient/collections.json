@@ -1,7 +1,7 @@
 [
   {
     "id": "rentspace_col_sprint2_full",
-    "name": "RentSpace API (Sprint 2)",
+    "name": "RentSpace API",
     "description": "Complete RentSpace Express + MySQL API Test Collection",
     "variables": [
       {
