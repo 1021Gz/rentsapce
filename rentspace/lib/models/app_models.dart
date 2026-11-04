@@ -59,17 +59,13 @@ class SpaceItem {
   String get categoryLabel {
     switch (category) {
       case 'meeting_room':
-      case 'ห้องประชุม':
         return 'ห้องประชุม';
       case 'study_room':
-      case 'ห้องอ่านหนังสือ':
         return 'ห้องอ่านหนังสือ';
       case 'music_room':
-      case 'ห้องซ้อมดนตรี':
         return 'ห้องซ้อมดนตรี';
       case 'studio':
-      case 'สตูดิโอ':
-        return 'สตูดิโอ';
+        return 'สตูดิโอถ่ายภาพ';
       default:
         return 'พื้นที่อเนกประสงค์';
     }
@@ -77,7 +73,7 @@ class SpaceItem {
 }
 
 class BookingItem {
-  int id;
+  final int id;
   final int renterId;
   final int spaceId;
   final String spaceName;
@@ -115,6 +111,31 @@ class BookingItem {
   static String formatDt(DateTime dt) {
     return '${dt.year}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')} ${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
   }
+}
+
+class AdminLogEntry {
+  final int logId;
+  final int adminId;
+  final String adminName;
+  final String action;
+  final String targetType;
+  final int targetId;
+  final String details;
+  final DateTime createdAt;
+
+  AdminLogEntry({
+    required this.logId,
+    required this.adminId,
+    required this.adminName,
+    required this.action,
+    required this.targetType,
+    required this.targetId,
+    required this.details,
+    DateTime? createdAt,
+  }) : createdAt = createdAt ?? DateTime.now();
+
+  String get formattedTime =>
+      '${createdAt.hour.toString().padLeft(2, '0')}:${createdAt.minute.toString().padLeft(2, '0')} น.';
 }
 
 List<UserAccount> createInitialUsers() => [
@@ -222,7 +243,94 @@ List<BookingItem> createInitialBookings() => [
       ),
     ];
 
-// 50% Standalone In-Memory Data for UI
-List<SpaceItem> sampleSpaces = createInitialSpaces();
-List<BookingItem> sampleBookings = createInitialBookings();
-UserAccount sampleUser = createInitialUsers().first;
+List<AdminLogEntry> createInitialAdminLogs() => [
+      AdminLogEntry(
+        logId: 1,
+        adminId: 1003,
+        adminName: 'ผู้ดูแลระบบ',
+        action: 'APPROVE_SPACE',
+        targetType: 'space',
+        targetId: 1,
+        details: 'อนุมัติห้องประชุมสว่างใจ',
+      ),
+    ];
+
+// 50% Standalone In-Memory Mock Store
+final List<UserAccount> globalUsers = createInitialUsers();
+final List<SpaceItem> globalSpaces = createInitialSpaces();
+final List<BookingItem> globalBookings = createInitialBookings();
+final List<AdminLogEntry> globalAdminLogs = createInitialAdminLogs();
+
+UserAccount? currentUser = globalUsers[0];
+
+List<SpaceItem> get sampleSpaces => globalSpaces;
+List<BookingItem> get sampleBookings => globalBookings;
+UserAccount get sampleUser => currentUser ?? globalUsers[0];
+
+class MockStore {
+  static void approveSpace(SpaceItem space, String status) {
+    space.approvalStatus = status;
+    globalAdminLogs.insert(
+      0,
+      AdminLogEntry(
+        logId: DateTime.now().millisecondsSinceEpoch,
+        adminId: 1003,
+        adminName: 'ผู้ดูแลระบบ',
+        action: status == 'approved' ? 'APPROVE_SPACE' : 'REJECT_SPACE',
+        targetType: 'space',
+        targetId: space.id,
+        details: '${status == 'approved' ? 'อนุมัติ' : 'ปฏิเสธ'}พื้นที่: ${space.name}',
+      ),
+    );
+  }
+
+  static void toggleUserStatus(int userId, String status) {
+    final user = globalUsers.firstWhere((x) => x.userId == userId);
+    user.status = status;
+    globalAdminLogs.insert(
+      0,
+      AdminLogEntry(
+        logId: DateTime.now().millisecondsSinceEpoch,
+        adminId: 1003,
+        adminName: 'ผู้ดูแลระบบ',
+        action: 'TOGGLE_USER_STATUS',
+        targetType: 'user',
+        targetId: userId,
+        details: '${status == 'suspended' ? 'ระงับ' : 'ปลดระงับ'}บัญชี: ${user.username}',
+      ),
+    );
+  }
+
+  static void updateBookingStatus(int bookingId, String status) {
+    final booking = globalBookings.firstWhere((x) => x.id == bookingId);
+    booking.status = status;
+  }
+
+  static void addSpace({
+    required String name,
+    required String category,
+    required String location,
+    required String address,
+    required double pricePerHour,
+    required int capacity,
+    required String description,
+    String imageUrl = 'assets/images/meeting.jpg',
+  }) {
+    final newId = (globalSpaces.map((s) => s.id).fold(0, (a, b) => a > b ? a : b)) + 1;
+    final newSpace = SpaceItem(
+      id: newId,
+      ownerId: currentUser?.userId ?? 1001,
+      ownerName: currentUser?.fullName ?? 'ภูมิ ศรีสุข',
+      name: name,
+      category: category,
+      location: location,
+      address: address,
+      pricePerHour: pricePerHour,
+      capacity: capacity,
+      description: description,
+      imageUrls: [imageUrl],
+      approvalStatus: 'pending',
+    );
+    globalSpaces.insert(0, newSpace);
+  }
+}
